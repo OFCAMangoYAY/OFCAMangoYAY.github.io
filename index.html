@@ -1,79 +1,88 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>System Specs</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Specs</title>
 </head>
 <body>
-<h1>System Diagnostics</h1>
-<p>Device Specs for Mango</p>
-<hr>
+    <h1>System Diagnostics</h1>
+    <p>Checking specs for Mango...</p>
 
-<h3>Memory (RAM)</h3>
-<p id="ram-val">Checking...</p>
+    <hr>
 
-<h3>Operating System</h3>
-<p id="os-val">Checking...</p>
+    <div>
+        <h3>Memory (RAM)</h3>
+        <p id="ram-val">Checking...</p>
+    </div>
 
-<h3>Browser</h3>
-<p id="browser-name">Checking...</p>
+    <div>
+        <h3>Operating System</h3>
+        <p id="os-val">Checking...</p>
+    </div>
 
-<h3>Engine</h3>
-<p id="engine-val">Checking...</p>
+    <div>
+        <h3>Browser Name</h3>
+        <p id="browser-name">Checking...</p>
+    </div>
 
-<hr>
+    <div>
+        <h3>Browser Engine</h3>
+        <p id="engine-val">Checking...</p>
+    </div>
 
-<h3>Full User Agent</h3>
-<p id="ua-val">Checking...</p>
+    <hr>
 
-<br>
+    <div>
+        <h3>Full User Agent String</h3>
+        <p id="ua-val">Checking...</p>
+    </div>
 
-<button onclick="location.reload()">Refresh Data</button>
+    <button onclick="location.reload()">Refresh Page</button>
 
-<script>
-    function runDiagnostics() {
-        var ua = navigator.userAgent || "";
-        
-        // 1. RAM Detection
-        try {
-            if (navigator.deviceMemory) {
-                document.getElementById('ram-val').innerText = navigator.deviceMemory + " GB (approx)";
-            } else {
-                document.getElementById('ram-val').innerText = "Restricted/Not Shared";
+    <script>
+        function runDiagnostics() {
+            var ua = navigator.userAgent || "";
+            var ramDisp = document.getElementById('ram-val');
+            var osDisp = document.getElementById('os-val');
+            var brDisp = document.getElementById('browser-name');
+            var enDisp = document.getElementById('engine-val');
+            var uaDisp = document.getElementById('ua-val');
+
+            try {
+                if (navigator.deviceMemory) {
+                    ramDisp.innerText = navigator.deviceMemory + " GB (approx)";
+                } else {
+                    ramDisp.innerText = "Access Restricted";
+                }
+            } catch (e) {
+                ramDisp.innerText = "Error reading RAM";
             }
-        } catch (e) {
-            document.getElementById('ram-val').innerText = "Error";
+
+            var os = "Unknown Device";
+            if (ua.indexOf("Tizen") > -1) os = "Samsung Tizen TV";
+            else if (ua.indexOf("Web0S") > -1 || ua.indexOf("WebOS") > -1) os = "LG WebOS";
+            else if (ua.indexOf("Windows") > -1) os = "Windows";
+            else if (ua.indexOf("Mac") > -1) os = "macOS";
+            else if (ua.indexOf("Android") > -1) os = "Android / Google TV";
+            else if (ua.indexOf("Linux") > -1) os = "Linux Base";
+            osDisp.innerText = os;
+
+            var browser = "Generic Browser";
+            var engine = "WebKit/Blink";
+            if (ua.indexOf("SamsungBrowser") > -1) browser = "Samsung Browser";
+            else if (ua.indexOf("Edg") > -1) browser = "Edge";
+            else if (ua.indexOf("Chrome") > -1) browser = "Chrome-based";
+            else if (ua.indexOf("Firefox") > -1) {
+                browser = "Firefox";
+                engine = "Gecko";
+            } else if (ua.indexOf("Safari") > -1) browser = "Safari";
+
+            brDisp.innerText = browser;
+            enDisp.innerText = engine;
+            uaDisp.innerText = ua;
         }
-
-        // 2. OS Detection
-        var os = "Smart Device";
-        if (ua.indexOf("Tizen") > -1) os = "Samsung Tizen TV";
-        else if (ua.indexOf("Web0S") > -1 || ua.indexOf("WebOS") > -1) os = "LG WebOS";
-        else if (ua.indexOf("Windows") > -1) os = "Windows";
-        else if (ua.indexOf("Android") > -1) os = "Android / Google TV";
-        else if (ua.indexOf("Linux") > -1) os = "Linux Base";
-        
-        document.getElementById('os-val').innerText = os;
-
-        // 3. Browser Detection
-        var browser = "Generic Browser";
-        var engine = "WebKit/Blink";
-
-        if (ua.indexOf("SamsungBrowser") > -1) browser = "Samsung Browser";
-        else if (ua.indexOf("Chrome") > -1) browser = "Chrome-based";
-        else if (ua.indexOf("Firefox") > -1) {
-            browser = "Firefox";
-            engine = "Gecko";
-        } else if (ua.indexOf("Safari") > -1) browser = "Safari";
-
-        document.getElementById('browser-name').innerText = browser;
-        document.getElementById('engine-val').innerText = engine;
-        document.getElementById('ua-val').innerText = ua;
-    }
-
-    window.onload = runDiagnostics;
-</script>
-
-<
-    /body>
+        window.onload = runDiagnostics;
+    </script>
+</body>
 </html>
+
